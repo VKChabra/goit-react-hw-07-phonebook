@@ -3,19 +3,22 @@ import { useSelector } from 'react-redux';
 import styles from './contacts.module.css';
 
 const Contacts = () => {
-  const contactsSelector = useSelector(state => state.contacts.items);
-  const filterValueSelector = useSelector(state => state.contacts.filter);
+  const contacts = undefined;
+  const filterValue = useSelector(state => state.contacts.filter);
 
-  const normalizedFilter = filterValueSelector.trim().toLowerCase();
-  const filteredContacts = contactsSelector.filter(contact =>
-    contact.name.toLowerCase().includes(normalizedFilter)
-  );
+  const filteredContacts = () => {
+    const normalizedFilter = filterValue.trim().toLowerCase();
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(normalizedFilter)
+    );
+  };
 
   return (
     <div className={styles.contactsList}>
-      {filteredContacts.map(({ id, name, number }) => (
-        <ContactsItem key={id} id={id} name={name} number={number} />
-      ))}
+      {contacts &&
+        filteredContacts().map(({ id, name, number }) => (
+          <ContactsItem key={id} id={id} name={name} number={number} />
+        ))}
     </div>
   );
 };
