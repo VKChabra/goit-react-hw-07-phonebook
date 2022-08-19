@@ -2,6 +2,12 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchContacts } from 'redux/api';
 import ContactsItem from 'components/Contacts/ContactsItem';
+import {
+  getContacts,
+  getIsLoading,
+  getError,
+} from 'redux/contacts/contactsSelectors';
+import { getFilter } from 'redux/filter/filterSelectors.js';
 import Loader from 'components/Loader';
 import styles from './contacts.module.css';
 
@@ -12,8 +18,10 @@ const Contacts = () => {
     dispatch(fetchContacts());
   }, [dispatch]);
 
-  const contacts = useSelector(state => state.contacts.items);
-  const filterValue = useSelector(state => state.filter.filterValue);
+  const contacts = useSelector(getContacts);
+  const filterValue = useSelector(getFilter);
+  const isLoading = useSelector(getIsLoading);
+  const error = useSelector(getError);
 
   const filteredContacts = () => {
     const normalizedFilter = filterValue.trim().toLowerCase();
@@ -24,10 +32,11 @@ const Contacts = () => {
 
   return (
     <div className={styles.contactsList}>
-      {!contacts.length && <Loader />}
-      {contacts.length > 0 &&
+      {error && <p>{error}</p>}
+      {isLoading && <Loader />}
+      {contacts?.length > 0 &&
         filteredContacts().map(({ id, name, phone }) => (
-          <ContactsItem key={id} name={name} number={phone} />
+          <ContactsItem key={id} id={id} name={name} number={phone} />
         ))}
     </div>
   );
