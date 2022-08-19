@@ -1,7 +1,7 @@
 import styles from './contactForm.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { nanoid } from 'nanoid';
-import { addContact } from 'redux/contacts';
+// import { addContact } from 'redux/contacts';
 
 const ContactForm = () => {
   const dispatch = useDispatch();
@@ -29,7 +29,7 @@ const ContactForm = () => {
       number,
     };
 
-    dispatch(addContact(contact));
+    // dispatch(addContact(contact));
   };
 
   return (

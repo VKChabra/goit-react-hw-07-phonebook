@@ -1,10 +1,19 @@
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchContacts } from 'redux/api';
 import ContactsItem from 'components/Contacts/ContactsItem';
-import { useSelector } from 'react-redux';
+import Loader from 'components/Loader';
 import styles from './contacts.module.css';
 
 const Contacts = () => {
-  const contacts = undefined;
-  const filterValue = useSelector(state => state.contacts.filter);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
+
+  const contacts = useSelector(state => state.contacts.items);
+  const filterValue = useSelector(state => state.filter.filterValue);
 
   const filteredContacts = () => {
     const normalizedFilter = filterValue.trim().toLowerCase();
@@ -15,9 +24,10 @@ const Contacts = () => {
 
   return (
     <div className={styles.contactsList}>
-      {contacts &&
-        filteredContacts().map(({ id, name, number }) => (
-          <ContactsItem key={id} id={id} name={name} number={number} />
+      {!contacts.length && <Loader />}
+      {contacts.length > 0 &&
+        filteredContacts().map(({ id, name, phone }) => (
+          <ContactsItem key={id} name={name} number={phone} />
         ))}
     </div>
   );

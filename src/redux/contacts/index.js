@@ -1,43 +1,32 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const CONTACTS_SLICE_NAME = 'contacts';
-const ADD_CONTACT = 'addContact';
-const DELETE_CONTACT = 'deleteContact';
-const SET_FILTER = 'setFilter';
-export const CONTACTS_SLICE = {
-  CONTACTS_SLICE_NAME,
-  ADD_CONTACT,
-  DELETE_CONTACT,
-  SET_FILTER,
-};
+export const CONTACTS_SLICE_NAME = 'contacts';
 
 const initialState = {
-  items: [
-    { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-    { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-    { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-    { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-  ],
-  filter: '',
+  error: '',
+  isLoading: false,
+  items: [],
 };
 
 const contactsSlice = createSlice({
   name: CONTACTS_SLICE_NAME,
   initialState,
   reducers: {
-    [ADD_CONTACT]: (state, action) => {
-      state.items = [action.payload, ...state.items];
+    fetchItemsRequest: state => {
+      state.error = '';
+      state.isLoading = true;
     },
-    [DELETE_CONTACT]: (state, action) => {
-      state.items = state.items.filter(
-        contact => contact.id !== action.payload
-      );
+    fetchItemsSuccess: (state, action) => {
+      state.items = action.payload;
+      state.isLoading = false;
     },
-    [SET_FILTER]: (state, action) => {
-      state.filter = action.payload;
+    fetchItemsFailure: (state, action) => {
+      state.error = action.payload;
+      state.isLoading = false;
     },
   },
 });
 
-export const { addContact, deleteContact, setFilter } = contactsSlice.actions;
+export const { fetchItemsRequest, fetchItemsSuccess, fetchItemsFailure } =
+  contactsSlice.actions;
 export default contactsSlice.reducer;
