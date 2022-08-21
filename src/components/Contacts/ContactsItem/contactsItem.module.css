@@ -1,14 +1,9 @@
 .contactsListItem {
   display: flex;
   justify-content: space-between;
-  max-width: 400px;
   margin-bottom: 10px;
 }
 
 .contactsListItem:last-child {
   margin-bottom: 0;
-}
-
-.contactsListItem button {
-  margin-left: 20px;
 }

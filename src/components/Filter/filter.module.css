@@ -1,9 +1,12 @@
 .filterLabel {
-  display: inline-block;
+  display: block;
+  max-width: 350px;
   margin-bottom: 20px;
 }
 
-.filterLabel input {
-  margin-left: 20px;
-  width: 200px;
+@media screen and (min-width: 375px) {
+  .filterLabel {
+    display: flex;
+    justify-content: space-between;
+  }
 }

@@ -1,11 +1,10 @@
+import { useAddContactMutation } from 'redux/api';
+import { BtnLoader } from 'components/Loader';
 import styles from './contactForm.module.css';
-import { useSelector, useDispatch } from 'react-redux';
-import { getContacts } from 'redux/contacts/contactsSelectors';
-import { addContact } from 'redux/api';
 
 const ContactForm = () => {
-  const dispatch = useDispatch();
-  const contacts = useSelector(getContacts);
+  const [addContact, { isLoading }] = useAddContactMutation();
+  const contacts = [];
 
   const submitAddContact = e => {
     e.preventDefault();
@@ -28,7 +27,7 @@ const ContactForm = () => {
       phone,
     };
 
-    dispatch(addContact(contact));
+    addContact(contact);
   };
 
   return (
@@ -53,7 +52,9 @@ const ContactForm = () => {
           required
         />
       </label>
-      <button type="submit">Add contact</button>
+      <button type="submit" disabled={isLoading}>
+        {isLoading ? BtnLoader('Adding...') : 'Add contact'}
+      </button>
     </form>
   );
 };

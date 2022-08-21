@@ -1,6 +1,7 @@
 import { ThreeDots } from 'react-loader-spinner';
+import { BiLoaderCircle } from 'react-icons/bi';
 
-const Loader = () => (
+export const Loader = () => (
   <ThreeDots
     height="120"
     width="120"
@@ -9,4 +10,10 @@ const Loader = () => (
   />
 );
 
-export default Loader;
+export const BtnLoader = text => {
+  return (
+    <>
+      <BiLoaderCircle /> ,{text}
+    </>
+  );
+};

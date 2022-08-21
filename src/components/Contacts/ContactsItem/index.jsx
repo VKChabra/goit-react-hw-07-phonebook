@@ -1,20 +1,21 @@
+import { useDeleteContactMutation } from 'redux/api';
+import { BtnLoader } from 'components/Loader';
 import styles from './contactsItem.module.css';
-import { useDispatch } from 'react-redux';
-import { deleteContact } from 'redux/api';
 import PropTypes from 'prop-types';
 
 const ContactsItem = ({ id, name, number }) => {
-  const dispatch = useDispatch();
+  const [deleteContact, { isLoading }] = useDeleteContactMutation();
   return (
     <li className={styles.contactsListItem}>
       {name}: {number}
       <button
         type="button"
+        disabled={isLoading}
         onClick={() => {
-          dispatch(deleteContact(id));
+          deleteContact(id);
         }}
       >
-        Delete
+        {isLoading ? BtnLoader('Deleting') : 'Delete'}
       </button>
     </li>
   );

@@ -1,29 +1,37 @@
-import {
-  fetchItemsRequest,
-  fetchItemsSuccess,
-  fetchItemsFailure,
-} from 'redux/contacts/contactsSlice.js';
-import axios from 'axios';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-axios.defaults.baseURL = 'https://62fcd44bb9e38585cd46d946.mockapi.io/';
+export const apiSlice = createApi({
+  reducerPath: 'api',
+  baseQuery: fetchBaseQuery({
+    baseUrl: 'https://62fcd44bb9e38585cd46d946.mockapi.io/',
+  }),
+  tagTypes: ['Post, Delete'],
+  endpoints: builder => ({
+    getContacts: builder.query({
+      query: () => 'contacts',
+      providesTags: ['Post', 'Delete'],
+    }),
+    addContact: builder.mutation({
+      query: prevContacts => ({
+        url: 'contacts',
+        method: 'POST',
+        body: prevContacts,
+      }),
+      invalidatesTags: ['Post'],
+    }),
+    deleteContact: builder.mutation({
+      query: (contactId, prevContacts) => ({
+        url: `contacts/${contactId}`,
+        method: 'DELETE',
+        body: prevContacts,
+      }),
+      invalidatesTags: ['Delete'],
+    }),
+  }),
+});
 
-export const fetchContacts = () => dispatch => {
-  dispatch(fetchItemsRequest());
-
-  axios
-    .get('contacts')
-    .then(data => dispatch(fetchItemsSuccess(data.data)))
-    .catch(error => dispatch(fetchItemsFailure(error.message)));
-};
-
-export const addContact = contact => () => {
-  axios.post('contacts', contact).catch(error => {
-    console.error(error);
-  });
-};
-
-export const deleteContact = id => () => {
-  axios.delete(`contacts/${id}`).catch(error => {
-    console.error(error);
-  });
-};
+export const {
+  useGetContactsQuery,
+  useAddContactMutation,
+  useDeleteContactMutation,
+} = apiSlice;
